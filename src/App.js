@@ -14,19 +14,26 @@ import { useStateContext } from './contexts/ContextProvider';
 import './App.css'
 
 const App = () => {
-    const { activeMenu, themeSettings , setThemeSettings, currentColor, currentMode } = useStateContext();
+    const { setCurrentColor, setCurretMode, activeMenu, themeSettings , setThemeSettings, currentColor, currentMode } = useStateContext();
 
-    
+ useEffect(() => {
+  const curentThemeColor = localStorage.getItem('themeColor');
+  const curentThemeMode = localStorage.getItem('themeMode');
+  if(curentThemeColor && currentThemeMode) {
+    setCurrentColor(curentThemeColor);
+    setCurretMode(curentThemeMode);
+  }
+ }, [])   
   return (
  <div className={currentMode === 'Dark' ? 'dark' : ''}>
       <BrowserRouter>
-      <div className="flex relative dark:bg-main-dark-bg">
+      <div className="relative flex dark:bg-main-dark-bg">
       <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
             <TooltipComponent content="Settings" position="Top" >
               <button
                 type="button"
                 style={{  background: currentColor, borderRadius: '50%' }}
-                className="text-3xl text-white p-3 hover:drop-shadow-xl hover:bg-light-gray"
+                className="p-3 text-3xl text-white hover:drop-shadow-xl hover:bg-light-gray"
                 onClick={() => setThemeSettings(true)}
               >
                 <FiSettings />
@@ -34,7 +41,7 @@ const App = () => {
             </TooltipComponent>
           </div>
           {activeMenu ? (
-              <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white " >
+              <div className="fixed bg-white w-72 sidebar dark:bg-secondary-dark-bg " >
                 <Sidebar />
               </div>
           ) : (
@@ -48,7 +55,7 @@ const App = () => {
             ? 'dark:bg-main-dark-bg  bg-main-bg min-h-screen md:ml-72 w-full  '
             : 'bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 '
           } >
-            <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full ">
+            <div className="fixed w-full md:static bg-main-bg dark:bg-main-dark-bg navbar ">
                 <Navbar />
             </div>
          
